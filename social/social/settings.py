@@ -1,5 +1,9 @@
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,9 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=4zmlvz@9%5u2g==v6@hm(a3-!8liyer2anw!1*u0ubv8d7$3o'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-AUTH_USER_MODEL = "accounts.Users" 
+AUTH_USER_MODEL = 'accounts.Users'
+AUTHENTICATION_BACKENDS = ['accounts.backend.EmailOrUsernameModelBackend', 'django.contrib.auth.backends.ModelBackend']
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -23,14 +28,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'core',
     'accounts',
+    
 ]
 
 MIDDLEWARE = [
@@ -62,6 +70,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'social.wsgi.application'
+
+
+#EMAIL SEETINGS
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 # Database

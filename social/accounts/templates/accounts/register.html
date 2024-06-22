@@ -2,9 +2,25 @@
 
 {% block content %}
     <h1>Регистрация</h1>
-    <form method="post">
+    <form method="post" class="my-form">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Зарегистрироваться</button>
+        <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+        <br>
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+        <br>
+        <label for="{{ form.password1.id_for_label }}">Пароль</label>
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+        <br>
+        <label for="{{ form.password2.id_for_label }}">Повторите пароль</label>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+        <br>
+        <br>
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
     </form>
 {% endblock %}
