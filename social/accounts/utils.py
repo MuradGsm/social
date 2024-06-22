@@ -7,7 +7,7 @@ from django.conf import settings
 def send_verification_email(user, request):
     subject = 'Подтверждение электронной почты'
     verification_url = request.build_absolute_uri(reverse('verify_email', args=[user.email_verification_token]))
-    html_content = render_to_string('email_verification.html', {'verification_link': verification_url})
+    html_content = render_to_string('register/email_verification.html', {'verification_link': verification_url})
     text_content = strip_tags(html_content)
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [user.email]

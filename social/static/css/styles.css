@@ -55,3 +55,49 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #0056b3;
 }
+
+
+.login-container {
+max-width: 400px;
+margin: 0 auto;
+padding: 20px;
+border: 1px solid #ccc;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+background-color: #f9f9f9;
+}
+
+.login-container h2 {
+text-align: center;
+margin-bottom: 20px;
+}
+
+.login-container form {
+display: flex;
+flex-direction: column;
+}
+
+.login-container .btn {
+background-color: #007bff;
+color: white;
+padding: 10px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+margin-top: 10px;
+}
+
+.login-container .btn:hover {
+background-color: #0056b3;
+}
+
+.login-container .forgot-password-link {
+display: block;
+text-align: center;
+margin-top: 10px;
+color: #007bff;
+}
+
+.login-container .forgot-password-link:hover {
+text-decoration: underline;
+}

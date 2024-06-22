@@ -6,6 +6,8 @@ from django.conf import settings
 from accounts.utils import send_verification_email
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 
 User = get_user_model()
@@ -18,7 +20,7 @@ def sign_up(request):
         if form.is_valid():
             user = form.save()
             send_verification_email(user, request)
-            return render(request, 'registration_success.html') 
+            return render(request, 'register/registration_success.html') 
     else:
         form = RegisterForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -57,3 +59,26 @@ def verify_email(request, token):
     user.is_verified = True
     user.save()
     return redirect('login')
+
+
+class PasswordResetView(auth_views.PasswordResetView):
+    template_name = 'password/password_reset_form.html'
+    email_template_name = 'password/password_reset_email.html'
+    subject_template_name = 'password/password_reset_subject.txt'
+    success_url = reverse_lazy('password_reset_done')
+
+
+# Представление для страницы подтверждения отправки инструкций по сбросу пароля
+class PasswordResetDoneView(auth_views.PasswordResetDoneView):
+    template_name = 'password/password_reset_done.html'
+
+
+# Представление для установки нового пароля
+class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    template_name = 'password/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+
+
+# Представление для страницы успешного сброса пароля
+class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+    template_name = 'password/password_reset_complete.html'
