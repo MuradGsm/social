@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from accounts.models import Users  # Импортируйте вашу пользовательскую модель
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
+
+Users = get_user_model()
 
 
 class RegisterForm(UserCreationForm):
@@ -22,3 +23,11 @@ class UserLoginForm(forms.Form):
         if not user:
             raise forms.ValidationError('Неверные учетные данные')
         return self.cleaned_data
+    
+class EditProfileForm(forms.ModelForm):
+    birth_date = forms.DateField(
+        widget=forms.SelectDateWidget(years=range(1900, 2025))
+    )
+    class Meta:
+        model = Users
+        fields = ['first_name', 'last_name', 'birth_date', 'bio', 'photo']

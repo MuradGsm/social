@@ -1,18 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from accounts.forms import RegisterForm, UserLoginForm
+from accounts.forms import RegisterForm, UserLoginForm, EditProfileForm
 from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.core.mail import send_mail
 from django.conf import settings
 from accounts.utils import send_verification_email
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 
-
 User = get_user_model()
 
-# accounts/views.py
 
 def sign_up(request):
     if request.method == 'POST':
@@ -60,6 +58,29 @@ def verify_email(request, token):
     user.save()
     return redirect('login')
 
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=request.user)
+    return render(request, 'accounts/edit_profile.html', {'form':form})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user ,request.POST)
+        if form.is_valid():
+            form.save()
+            logout(request)
+            return redirect('login')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'accounts/change_password.html', {'form':form})
+
 
 class PasswordResetView(auth_views.PasswordResetView):
     template_name = 'password/password_reset_form.html'
@@ -82,3 +103,4 @@ class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
 # Представление для страницы успешного сброса пароля
 class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
     template_name = 'password/password_reset_complete.html'
+
