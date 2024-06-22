@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Публикации</h1>
+    <div class="post-list">
+        {% for post in posts %}
+            <div class="post card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.author.username }}</h5>
+                    <p class="card-text">{{ post.text }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+                    {% endif %}
+                    <p class="card-text"><small class="text-muted">Создано: {{ post.created_at }}</small></p>
+                    <p class="card-text">Хэштеги: 
+                        {% for hashtag in post.hashtags.all %}
+                            #{{ hashtag.name }}
+                        {% endfor %}
+                    </p>
+                    <p class="card-text">Лайков: <span id="like-count-{{ post.id }}">{{ post.likes.count }}</span></p>
+                    <p class="card-text">Комментариев: {{ post.comments.count }}</p>
+                    <p class="card-text">Просмотров: {{ post.views.count }}</p>
+
+                    {% if user.is_authenticated %}
+                        <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">
+                            {% if post.id in liked_posts %}
+                                Убрать лайк
+                            {% else %}
+                                Лайкнуть
+                            {% endif %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="mt-4">
+        <h2>Создать публикацию</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Опубликовать</button>
+        </form>
+    </div>
+    {% else %}
+    <p>Пожалуйста, <a href="{% url 'login' %}">войдите</a>, чтобы создать публикацию.</p>
+    {% endif %}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.like-button').click(function() {
+            var postId = $(this).data('post-id');
+            var button = $(this);
+            $.ajax({
+                url: '{% url "like_post" 0 %}'.replace('0', postId),
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    $('#like-count-' + postId).text(response.like_count);
+                    if (button.text().trim() === 'Лайкнуть') {
+                        button.text('Убрать лайк');
+                    } else {
+                        button.text('Лайкнуть');
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
