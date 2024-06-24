@@ -46,7 +46,17 @@ def login_view(request):
 @login_required
 def profile(request):
     user = request.user
-    return render(request, 'accounts/profile.html', {'user': user})
+    section = request.GET.get('section', 'my_posts')
+    my_posts = user.my_posts.all()
+    saved_posts = user.saved_posts.all()
+    liked_posts = user.liked_posts.all()
+    return render(request, 'accounts/profile.html', {
+        'user': user,
+        'section': section,
+        'my_posts': my_posts,
+        'saved_posts': saved_posts,
+        'liked_posts': liked_posts
+    })
 
 def logout_view(request):
     logout(request)

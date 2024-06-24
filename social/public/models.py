@@ -1,13 +1,13 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 
-User = get_user_model()
+User = settings.AUTH_USER_MODEL
 
 class Hashtag(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     text = models.TextField()
     image = models.ImageField(upload_to='posts/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,4 +41,3 @@ class SavedPost(models.Model):
 
     class Meta:
         unique_together = ('user', 'post')
-

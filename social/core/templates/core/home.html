@@ -30,6 +30,25 @@
                                 Лайкнуть
                             {% endif %}
                         </button>
+                        <button class="btn btn-secondary save-post" data-post-id="{{ post.id }}">Сохранить</button>
+                    {% endif %}
+
+                    <div class="comments mt-3">
+                        <h6>Комментарии:</h6>
+                        {% for comment in post.comments.all %}
+                            <div class="comment">
+                                <p><strong>{{ comment.author.username }}</strong>: {{ comment.text }}</p>
+                                <p><small>{{ comment.created_at }}</small></p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_comment' post.id %}">
+                            {% csrf_token %}
+                            <textarea name="text" required></textarea>
+                            <button type="submit" class="btn btn-secondary mt-2">Добавить комментарий</button>
+                        </form>
                     {% endif %}
                 </div>
             </div>
@@ -72,6 +91,22 @@
                 }
             });
         });
+
+        $('.save-post').click(function() {
+            var postId = $(this).data('post-id');
+            $.ajax({
+                url: '{% url "save_post" 0 %}'.replace('0', postId),
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                }
+            });
+        });
     });
 </script>
 {% endblock %}
+
+

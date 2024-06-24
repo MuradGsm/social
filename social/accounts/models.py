@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
+from public.models import Post
 
 class Users(AbstractUser):
     email = models.EmailField(unique=True)
@@ -14,3 +15,15 @@ class Users(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    @property
+    def my_posts(self):
+        return self.posts.all()
+
+    @property
+    def saved_posts(self):
+        return self.saved_posts.all()
+
+    @property
+    def liked_posts(self):
+        return Post.objects.filter(likes__user=self)

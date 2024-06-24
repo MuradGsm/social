@@ -1,4 +1,3 @@
-<!-- profile.html -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -47,6 +46,24 @@
     .profile-buttons a:hover {
         background-color: #0056b3;
     }
+    .posts-section {
+        margin-top: 20px;
+    }
+    .posts-section h2 {
+        text-align: center;
+        color: #333;
+    }
+    .posts-section ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .posts-section li {
+        background-color: #fff;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
 </style>
 
 <div class="profile-container">
@@ -61,6 +78,37 @@
     <div class="profile-buttons">
         <a href="{% url 'change_password' %}">Безопасность</a>
         <a href="{% url 'edit_profile' %}">Редактировать аккаунт</a>
+    </div>
+
+    <div class="profile-buttons">
+        <a href="?section=my_posts">Мои посты</a>
+        <a href="?section=saved_posts">Сохраненные посты</a>
+        <a href="?section=liked_posts">Понравившиеся посты</a>
+    </div>
+
+    <div class="posts-section">
+        {% if section == 'my_posts' %}
+            <h2>Мои посты</h2>
+            <ul>
+                {% for post in my_posts %}
+                    <li>{{ post.text }}</li>
+                {% endfor %}
+            </ul>
+        {% elif section == 'saved_posts' %}
+            <h2>Сохраненные посты</h2>
+            <ul>
+                {% for post in saved_posts %}
+                    <li>{{ post.text }}</li>
+                {% endfor %}
+            </ul>
+        {% elif section == 'liked_posts' %}
+            <h2>Понравившиеся посты</h2>
+            <ul>
+                {% for post in liked_posts %}
+                    <li>{{ post.text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
