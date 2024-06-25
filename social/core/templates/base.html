@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -26,6 +27,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Выход</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Уведомления
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for notification in user.notifications.all %}
+                            <a class="dropdown-item" href="#">{{ notification.message }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
                     {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Вход</a>
@@ -39,12 +50,33 @@
         </nav>
     </header>
     <main>
-        {% block content %}
-        <!-- Здесь будет контент для каждой страницы -->
-        {% endblock %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>Пользователи</h5>
+                    <ul class="list-group">
+                        {% get_all_users_except_current user as users %}
+                        {% for user in users %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ user.username }}
+                            <a href="{% url 'send_friend_request' user.id %}" class="btn btn-primary btn-sm">Добавить в друзья</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    {% block content %}
+                    <!-- Здесь будет контент для каждой страницы -->
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
     </main>
     <footer>
         <!-- Здесь может быть информация о копирайте и другие детали -->
     </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
