@@ -8,6 +8,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from django.views import View
+from django.utils.decorators import method_decorator
 
 User = get_user_model()
 
@@ -47,9 +49,9 @@ def login_view(request):
 def profile(request):
     user = request.user
     section = request.GET.get('section', 'my_posts')
-    my_posts = user.my_posts.all()
-    saved_posts = user.saved_posts.all()
-    liked_posts = user.liked_posts.all()
+    my_posts = user.get_my_posts()
+    saved_posts = user.get_saved_posts()
+    liked_posts = user.get_liked_posts()
     return render(request, 'accounts/profile.html', {
         'user': user,
         'section': section,
@@ -91,6 +93,19 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
     return render(request, 'accounts/change_password.html', {'form':form})
 
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileView(View):
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        section = 'my_posts'
+        my_posts = user.get_my_posts()
+        return render(request, 'accounts/user_profile.html', {
+            'user': user,
+            'section': section,
+            'my_posts': my_posts
+        })
+    
 
 class PasswordResetView(auth_views.PasswordResetView):
     template_name = 'password/password_reset_form.html'
