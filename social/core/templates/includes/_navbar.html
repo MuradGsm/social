@@ -18,17 +18,10 @@
                     Уведомления
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% if user.notifications.exists %}
-                        {% for notification in user.notifications.all %}
-                        <a class="dropdown-item" href="{% url 'notifications' %}">
-                            <p>{{ notification.message }}</p>
-                        </a>
-                        {% endfor %}
-                    {% else %}
-                        <p class="dropdown-item">Нет новых уведомлений</p>
-                    {% endif %}
+                    <a href="{% url 'notifications' %}">Уведомления</a>
                 </div>
             </li>
+            
             
             {% else %}
             <li class="nav-item">

@@ -73,8 +73,12 @@
     <p><strong>Биография:</strong> {{ user.bio }}</p>
     <p><strong>Электронная почта:</strong> {{ user.email }}</p>
 
-    <a href="{% url 'send_friend_request' user.id %}" class="friend-request-button">Добавить в друзья</a>
-
+    <form method="post" action="{% url 'send_friend_request' %}">
+        {% csrf_token %}
+        <input type="hidden" name="to_user" value="{{ user.id }}">
+        <button type="submit">Отправить запрос в друзья</button>
+    </form>
+    
     <div class="posts-section">
         <h2>Посты пользователя</h2>
         <ul>

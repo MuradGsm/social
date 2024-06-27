@@ -1,27 +1,17 @@
-<!-- templates/notifications.html -->
-{% extends 'base.html' %}
+<!-- notifications.html -->
+{% extends "base.html" %}
 
 {% block content %}
 <h2>Уведомления</h2>
-<div class="list-group">
+<ul>
     {% for notification in notifications %}
-    <div class="list-group-item">
-        <p>{{ notification.message }}</p>
-        {% if notification.friend_request %}
-            <p>Friend Request ID: {{ notification.friend_request.id }}</p>
-            <form method="post" action="{% url 'accept_friend_request' notification.friend_request.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success btn-sm">Принять</button>
-            </form>
-            <form method="post" action="{% url 'decline_friend_request' notification.friend_request.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-sm">Отклонить</button>
-            </form>
-        {% else %}
-            <p>Нет запроса в друзья</p>
-        {% endif %}
-    </div>
+        <li>
+            {{ notification.message }} - {{ notification.created_at }}
+            {% if notification.friend_request %}
+                <a href="{% url 'accept_friend_request' notification.friend_request.id %}">Принять</a>
+                <a href="{% url 'decline_friend_request' notification.friend_request.id %}">Отклонить</a>
+            {% endif %}
+        </li>
     {% endfor %}
-</div>
+</ul>
 {% endblock %}
-

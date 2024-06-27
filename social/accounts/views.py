@@ -10,6 +10,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.views import View
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from friends.forms import FriendRequestForm
 
 User = get_user_model()
 
@@ -94,16 +96,38 @@ def change_password(request):
     return render(request, 'accounts/change_password.html', {'form':form})
 
 
+
 @method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_protect, name='dispatch')
 class UserProfileView(View):
-    def get(self, request, username):
-        user = get_object_or_404(User, username=username)
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        section = 'my_posts'
+        my_posts = user.get_my_posts()
+        form = FriendRequestForm(initial={'to_user': user.id})
+        return render(request, 'accounts/user_profile.html', {
+            'user': user,
+            'section': section,
+            'my_posts': my_posts,
+            'form': form
+        })
+
+    def post(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        form = FriendRequestForm(request.POST)
+        if form.is_valid():
+            friend_request = form.save(commit=False)
+            friend_request.from_user = request.user
+            friend_request.to_user = user
+            friend_request.save()
+            return redirect('profile', id=user_id)
         section = 'my_posts'
         my_posts = user.get_my_posts()
         return render(request, 'accounts/user_profile.html', {
             'user': user,
             'section': section,
-            'my_posts': my_posts
+            'my_posts': my_posts,
+            'form': form
         })
     
 
