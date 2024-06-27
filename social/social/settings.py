@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'public',
     'friends',
     'groups',
+    'chats',
 ]
 
 MIDDLEWARE = [

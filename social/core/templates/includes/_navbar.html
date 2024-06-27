@@ -21,8 +21,9 @@
                     <a href="{% url 'notifications' %}">Уведомления</a>
                 </div>
             </li>
-            
-            
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'chat_list' %}">Сообщения</a>
+            </li>
             {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login' %}">Вход</a>
@@ -34,3 +35,4 @@
         </ul>
     </div>
 </nav>
+

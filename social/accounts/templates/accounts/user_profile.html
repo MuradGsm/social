@@ -78,6 +78,10 @@
         <input type="hidden" name="to_user" value="{{ user.id }}">
         <button type="submit">Отправить запрос в друзья</button>
     </form>
+
+    <form method="get" action="{% url 'start_chat' user.id %}">
+        <button type="submit">Написать сообщение</button>
+    </form>
     
     <div class="posts-section">
         <h2>Посты пользователя</h2>

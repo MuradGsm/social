@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include('public.urls')),
     path('', include('friends.urls')),
     path('groups/', include('groups.urls')),
+    path('chats/', include('chats.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
