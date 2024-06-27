@@ -6,6 +6,10 @@ User = settings.AUTH_USER_MODEL
 class Hashtag(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        super().save(*args, **kwargs)
+
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     text = models.TextField()

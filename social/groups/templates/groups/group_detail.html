@@ -1,0 +1,13 @@
+<!-- templates/groups/group_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ group.name }}</h2>
+  <p>{{ group.description }}</p>
+  <p>Category: {{ group.category }}</p>
+  <p>Tags: {% for tag in group.tags.all %}{{ tag.name }} {% endfor %}</p>
+  <img src="{{ group.avatar.url }}" alt="{{ group.name }}">
+  <p>Members: {{ group.members.count }}</p>
+  <a href="{% url 'join_group' group.pk %}">Join Group</a>
+  <a href="{% url 'manage_group' group.pk %}">Manage Group</a>
+{% endblock %}

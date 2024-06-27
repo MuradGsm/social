@@ -1,0 +1,11 @@
+<!-- templates/groups/manage_group.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Manage Group: {{ group.name }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save changes</button>
+  </form>
+{% endblock %}
