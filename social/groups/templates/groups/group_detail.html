@@ -2,12 +2,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>{{ group.name }}</h2>
-  <p>{{ group.description }}</p>
-  <p>Category: {{ group.category }}</p>
-  <p>Tags: {% for tag in group.tags.all %}{{ tag.name }} {% endfor %}</p>
-  <img src="{{ group.avatar.url }}" alt="{{ group.name }}">
-  <p>Members: {{ group.members.count }}</p>
-  <a href="{% url 'join_group' group.pk %}">Join Group</a>
-  <a href="{% url 'manage_group' group.pk %}">Manage Group</a>
+<div class="container mt-4">
+    <h2 class="mb-4">{{ group.name }}</h2>
+    <p>{{ group.description }}</p>
+    <p>Категория: {{ group.category }}</p>
+    <p>Теги: {% for tag in group.tags.all %}<span class="badge badge-secondary">{{ tag.name }}</span> {% endfor %}</p>
+    <img src="{{ group.avatar.url }}" alt="{{ group.name }}" class="img-fluid mb-3" style="max-width: 300px;">
+    <p>Участники: {{ group.members.count }}</p>
+    <a href="{% url 'join_group' group.pk %}" class="btn btn-success">Присоединиться</a>
+    <a href="{% url 'manage_group' group.pk %}" class="btn btn-warning">Управлять группой</a>
+</div>
 {% endblock %}

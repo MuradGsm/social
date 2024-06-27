@@ -137,6 +137,20 @@ class PasswordResetView(auth_views.PasswordResetView):
     subject_template_name = 'password/password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
 
+    def form_valid(self, form):
+        # Отправка HTML-письма
+        opts = {
+            'use_https': self.request.is_secure(),
+            'token_generator': self.token_generator,
+            'from_email': self.from_email,
+            'email_template_name': self.email_template_name,
+            'subject_template_name': self.subject_template_name,
+            'request': self.request,
+            'html_email_template_name': self.email_template_name,  # Добавьте эту строку
+        }
+        form.save(**opts)
+        return super().form_valid(form)
+
 
 # Представление для страницы подтверждения отправки инструкций по сбросу пароля
 class PasswordResetDoneView(auth_views.PasswordResetDoneView):

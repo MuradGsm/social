@@ -2,10 +2,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Manage Group: {{ group.name }}</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save changes</button>
-  </form>
+<div class="container mt-4">
+    <h2 class="mb-4">Управление группой: {{ group.name }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+</div>
 {% endblock %}

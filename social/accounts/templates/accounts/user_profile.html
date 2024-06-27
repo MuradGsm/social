@@ -1,93 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<style>
-    .profile-container {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .profile-container h1 {
-        text-align: center;
-        color: #333;
-    }
-    .profile-container img {
-        display: block;
-        margin: 0 auto;
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-    }
-    .profile-container p {
-        font-size: 16px;
-        color: #555;
-        margin: 10px 0;
-    }
-    .profile-container p strong {
-        color: #333;
-    }
-    .posts-section {
-        margin-top: 20px;
-    }
-    .posts-section h2 {
-        text-align: center;
-        color: #333;
-    }
-    .posts-section ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    .posts-section li {
-        background-color: #fff;
-        margin: 10px 0;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-    .friend-request-button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-top: 20px;
-        background-color: #007bff;
-        color: white;
-        text-align: center;
-        border-radius: 5px;
-        text-decoration: none;
-    }
-    .friend-request-button:hover {
-        background-color: #0056b3;
-    }
-</style>
-
 <div class="profile-container">
-    <h1>Профиль пользователя {{ user.username }}</h1>
-    <img src="{{ user.photo.url }}" alt="Фото профиля">
-    <p><strong>Имя:</strong> {{ user.first_name }}</p>
-    <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
-    <p><strong>Дата рождения:</strong> {{ user.birth_date }}</p>
-    <p><strong>Биография:</strong> {{ user.bio }}</p>
-    <p><strong>Электронная почта:</strong> {{ user.email }}</p>
+    <h1 class="profile-title">Профиль пользователя {{ user.username }}</h1>
+    <div class="profile-info">
+        <img class="profile-photo" src="{{ user.photo.url }}" alt="Фото профиля">
+        <div class="profile-details">
+            <p><strong>Имя:</strong> {{ user.first_name }}</p>
+            <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+            <p><strong>Дата рождения:</strong> {{ user.birth_date }}</p>
+            <p><strong>Биография:</strong> {{ user.bio }}</p>
+            <p><strong>Электронная почта:</strong> {{ user.email }}</p>
+        </div>
+    </div>
 
-    <form method="post" action="{% url 'send_friend_request' %}">
-        {% csrf_token %}
-        <input type="hidden" name="to_user" value="{{ user.id }}">
-        <button type="submit">Отправить запрос в друзья</button>
-    </form>
-
-    <form method="get" action="{% url 'start_chat' user.id %}">
-        <button type="submit">Написать сообщение</button>
-    </form>
+    <div class="profile-buttons">
+        <form method="post" action="{% url 'send_friend_request' %}">
+            {% csrf_token %}
+            <input type="hidden" name="to_user" value="{{ user.id }}">
+            <button type="submit" class="btn"><i class="fas fa-user-plus"></i> Отправить запрос в друзья</button>
+        </form>
+        <form method="get" action="{% url 'start_chat' user.id %}">
+            <button type="submit" class="btn"><i class="fas fa-envelope"></i> Написать сообщение</button>
+        </form>
+    </div>
     
     <div class="posts-section">
         <h2>Посты пользователя</h2>
-        <ul>
+        <ul class="posts-list">
             {% for post in my_posts %}
-                <li>{{ post.text }}</li>
+                <li class="post-item">{{ post.text }}</li>
             {% endfor %}
         </ul>
     </div>

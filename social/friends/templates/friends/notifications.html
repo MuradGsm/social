@@ -2,16 +2,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Уведомления</h2>
-<ul>
-    {% for notification in notifications %}
-        <li>
-            {{ notification.message }} - {{ notification.created_at }}
-            {% if notification.friend_request %}
-                <a href="{% url 'accept_friend_request' notification.friend_request.id %}">Принять</a>
-                <a href="{% url 'decline_friend_request' notification.friend_request.id %}">Отклонить</a>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul>
+<div class="container mt-4">
+    <h2 class="mb-4">Уведомления</h2>
+    <ul class="list-group">
+        {% for notification in notifications %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ notification.message }}</strong> - <small class="text-muted">{{ notification.created_at }}</small>
+                </div>
+                {% if notification.friend_request %}
+                    <div>
+                        <a href="{% url 'accept_friend_request' notification.friend_request.id %}" class="btn btn-success btn-sm">Принять</a>
+                        <a href="{% url 'decline_friend_request' notification.friend_request.id %}" class="btn btn-danger btn-sm">Отклонить</a>
+                    </div>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
